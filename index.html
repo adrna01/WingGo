@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WingGo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #006938;
+            color: white;
+            padding: 5px;
+            font-family: "Fugaz One";
+            font-size: 30px;
+            padding-right: 5px; 
+            width: 100%;
+            position: fixed;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        header nav ul li a:hover {
+            text-decoration: underline;
+            color: rgb(0, 155, 44);
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: #006938;
+            padding: 10px;
+            z-index: 1;
+            border-radius: 7px;
+        }
+
+        .categories:hover .submenu {
+            display: block;
+        }
+
+        .submenu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 5px 0;
+        }
+
+        main {
+            padding: 50px;
+            transition: margin-right 0.3s;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .category {
+            padding-top: 70px;
+            margin-bottom: 30px;
+        }
+
+        .products {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            border-radius: 10px;
+            border-color:#005a30
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .product h4 {
+            margin-top: 0;
+            text-decoration: underline;
+            font-family: "Public Sans";
+            text-transform: uppercase;
+            font-size: 17px;
+        }
+
+        aside {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100%;
+            background-color: #f9f9f9;
+            border-left: 1px solid #ccc;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: right 0.3s;
+        }
+
+        aside.open {
+            right: 0;
+        }
+
+        #cart h2, #customer-details h2 {
+            margin-top: 0;
+        }
+
+        #cart-items {
+            padding: 0;
+            margin: 0;
+            font-family: "Public Sans";
+        }
+
+        #cart-items li {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            position: relative;
+        }
+
+        #cart-items li button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+        }
+
+        #cart-items li button.remove-button {
+            right: 10px;
+        }
+
+        #cart-total {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-family: "Public Sans";
+        }
+
+        #customer-details label {
+            display: block;
+            margin-bottom: 5px;
+            font-family: "Public Sans"
+        }
+
+        #customer-details input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border-radius: 2px;
+            border-color:#005a30
+        }
+
+        #checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color:#005a30;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: "Fugaz One";
+            text-transform: uppercase;
+            font-size: 20px;
+        }
+
+        #checkout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #logo img {
+            width:150px;
+            height: auto;
+            padding-top: 10px;
+            padding-left: 5px;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+        }
+
+        .highlight {
+            animation: highlight 1s ease-in-out;
+        }
+
+        
+
+        .fugaz-one-regular {
+            font-family: "Fugaz One", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        h2 {
+            font-family: "Fugaz One";
+        }
+
+        .addtocart {
+            width: 100%;
+            background-color:#006938;
+            border-radius: 5px;
+            font-family: "Fugaz One";
+            color: white;
+            border: none; 
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .addtocart h3 {
+            color: white;
+            text-transform: uppercase;
+            font-size: 15px;
+        }
+
+        .addtocart:hover {
+            background-color:#005a30
+        }
+
+        .public-sans-unique {
+            font-family: "Public Sans", sans-serif;
+            font-weight: 800;
+            font-style: normal;
+        }
+
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,800;1,800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li id="logo"><a href="#"><img src="img/WING.D.png" alt="WingGo Logo"></a></li>
+                <li class="categories"><a href="#">CATEGORIES</a>
+                    <div class="submenu">
+                        <a href="#Wings" onclick="highlightSection('Wings')">Wings</a>
+                        <a href="#BonelessWings" onclick="highlightSection('BonelessWings')">Boneless Wings</a>
+                        <a href="#Sides" onclick="highlightSection('Sides')">Sides</a>
+                        <a href="#Drinks" onclick="highlightSection('Drinks')">Drinks</a>
+                    </div>
+                </li>
+                <li><a href="about.html">ABOUT</a></li>
+                <li><a href="#" class="cart-icon" onclick="toggleCart()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 18C6.44772 18 6 18.4477 6 19C6 19.5523 6.44772 20 7 20C7.55228 20 8 19.5523 8 19C8 18.4477 7.55228 18 7 18Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 18C16.4477 18 16 18.4477 16 19C16 19.5523 16.4477 20 17 20C17.5523 20 18 19.5523 18 19C18 18.4477 17.5523 18 17 18Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 1H5L7.68 14.39C7.77186 14.9147 8.05049 15.3842 8.46794 15.7156C8.8854 16.047 9.41126 16.2133 9.95 16.19H19.54C20.0787 16.2133 20.6046 16.047 21.022 15.7156C21.4395 15.3842 21.7181 14.9147 21.81 14.39L23 6H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="Wings" class="category">
+            <h2>Wings</h2>
+            <div class="products"></div>
+        </section>
+
+        <section id="BonelessWings" class="category">
+            <h2>Boneless Wings</h2>
+            <div class="products"></div>
+        </section>
+
+        <section id="Sides" class="category">
+            <h2>Sides</h2>
+            <div class="products"></div>
+        </section>
+
+        <section id="Drinks" class="category">
+            <h2>Drinks</h2>
+            <div class="products"></div>
+        </section>
+    </main>
+
+    <aside id="cart-container">
+        <form action="http://sirjm.infinityfreeapp.com/checkout.php" method="GET" id="checkout-form" onsubmit="prepareOrder()">
+            <div id="customer-details">
+                <h2>Delivery Details</h2>
+                <label for="cust-name">Name</label>
+                <input type="text" id="cust-name" name="cust_name" placeholder="Enter your name">
+                <label for="cust-email">Email</label>
+                <input type="text" id="cust-email" name="cust_email" placeholder="Enter your email">
+                <label for="cust-addr">Address</label>
+                <input type="text" id="cust-addr" name="cust_addr" placeholder="Enter your address">
+                <input type="hidden" id="cust_order" name="cust_order">
+            </div>
+            <div id="cart">
+                <h2>Shopping Cart</h2>
+                <ul id="cart-items"></ul>
+                <p>Total: ₱<span id="cart-total">0.00</span></p>
+            </div>
+            <button type="submit" id="checkout-btn">Checkout</button>
+        </form>
+        <span class="close-button" onclick="toggleCart()" style="cursor: pointer; position: absolute; top: 20px; right: 20px;">X</span>
+    </aside>
+
+    <script>
+        const products = {
+            Wings: [
+                { name: "5 PCS Wings", price: 234.99, img: "img/wings.jpg" },
+                { name: "7 PCS Wings", price: 324.99, img: "img/wings.jpg" },
+                { name: "11 PCS Wings", price: 494.99, img: "img/wings.jpg" },
+                { name: "15 PCS Wings", price: 624.99, img: "img/wings.jpg" },
+                { name: "19 PCS Wings", price: 814.99, img: "img/wings.jpg" },
+                { name: "24 PCS Wings", price: 994.99, img: "img/wings.jpg" }
+            ],
+            BonelessWings: [
+                { name: "8 PCS Boneless", price: 174.99, img: "img/bonelesswings.jpg" },
+                { name: "12 PCS Boneless", price: 264.99, img: "img/bonelesswings.jpg" },
+                { name: "17 PCS Boneless", price: 374.99, img: "img/bonelesswings.jpg" },
+                { name: "20 PCS Boneless", price: 514.99, img: "img/bonelesswings.jpg" },
+                { name: "24 PCS Boneless", price: 604.99, img: "img/bonelesswings.jpg" },
+                { name: "30 PCS Boneless", price: 824.99, img: "img/bonelesswings.jpg" }
+            ],
+            Sides: [
+                { name: "Onion Rings", price: 84.99, img: "img/onionrings.jpg"},
+                { name: "Texas-Style Fries", price: 94.99, img: "img/texasstyle.jpg"},
+                { name: "Cajun Fries", price: 94.99, img: "img/cajun.jpg"},
+                { name: "Louisiana Rub Fries", price: 124.99, img: "img/louisiana.jpg"},
+                { name: "Chipotle Rice", price: 44.99, img: "img/chipotle.jpg"},
+                { name: "Coleslaw", price: 44.99, img: "img/coleslaw.jpg"}
+            ],
+            Drinks: [
+                { name: "Beer", price: 94.99, img: "img/beer.jpg"},
+                { name: "Sparkling Iced Tea", price: 74.99, img: "img/icedtea.jpg"},
+                { name: "Iced Mocha Latte", price: 84.99, img: "img/mocha.jpg"},
+                { name: "Iced Caramel Latte", price: 84.99, img: "img/macch.jpg"},
+                { name: "Soda", price: 54.99, img: "img/soda.jpg"},
+                { name: "Bottled Water", price: 44.99, img: "img/water.jpg"}
+            ]
+        };
+
+        function displayProducts(category) {
+            const productsContainer = document.querySelector(`#${category} .products`);
+            productsContainer.innerHTML = '';
+            products[category].forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product');
+                productCard.innerHTML = `
+                    <img src="${product.img}" alt="${product.name}">
+                    <h4>${product.name}</h4>
+                    <p><i>${product.price.toFixed(2)}</i></p>
+                    <button class = "addtocart" onclick="addToCart('${category}', '${product.name}', ${product.price})">Add to Cart</button>
+                `;
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        Object.keys(products).forEach(displayProducts);
+
+        let cart = [];
+
+        function addToCart(category, name, price) {
+            const item = { category, prod_name: name, prod_price: price };
+            cart.push(item);
+            updateCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.prod_price;
+                const cartItem = document.createElement('li');
+                cartItem.innerHTML = `
+                    ${item.prod_name} - ₱${item.prod_price.toFixed(2)}
+                    <button class="remove-button" onclick="removeFromCart(${index})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+
+        function prepareOrder() {
+            const custOrder = JSON.stringify(cart);
+            document.getElementById('cust_order').value = custOrder;
+        }
+
+        function checkout() {
+            const custName = document.getElementById('cust-name').value;
+            const custEmail = document.getElementById('cust-email').value;
+            const custAddr = document.getElementById('cust-addr').value;
+
+            if (!custName || !custEmail || !custAddr) {
+                alert('Please fill in all delivery details.');
+                return;
+            }
+
+            prepareOrder();
+
+            document.getElementById('checkout-form').submit();
+        }
+
+        function toggleCart() {
+            const cartContainer = document.getElementById('cart-container');
+            const mainContent = document.querySelector('main');
+
+            if (cartContainer.classList.contains('open')) {
+                cartContainer.classList.remove('open');
+                mainContent.style.marginRight = '0';
+            } else {
+                cartContainer.classList.add('open');
+                mainContent.style.marginRight = '400px';
+            }
+        }
+
+        function highlightSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.add('highlight');
+            setTimeout(() => {
+                section.classList.remove('highlight');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
